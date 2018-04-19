@@ -70,30 +70,38 @@ class Stemmer:
             token = a_re.sub(b, token)
         return token
 
-    def parse(self, token):
+    def parse(self, token, gloss=False):
         """Parse a token into a list of stem and suffixes.
 
         Args:
             token (str): A word to be parsed.
+            gloss (bool): if True, list glosses instead of suffixes.
 
         Returns:
-            list: stem followed by suffixes, as defined by the rules in the
-            rule set.
+            list: stem followed by suffixes or glosses, as defined by the
+            rules in the rule set.
         """
         morphemes = []
-        for (a_re, b, _) in self.rules:
+        for a_re, b, gl in self.rules:
             if token in self.lexicon:
                 break
             while a_re.search(token):
                 m = a_re.search(token).group(0)
                 if not re.match('\{\{[A-Z]+\}\}', m):
-                    morphemes.append(m)
+                    if gloss:
+                        morphemes.append(gl)
+                    else:
+                        morphemes.append(m)
                 token = a_re.sub(b, token, 1)
         morphemes.append(token)
         return list(reversed(morphemes))
 
     def segment(self, token):
         """Parse a token into stem and suffix group.
+
+        This method takes a token as input and returns a tuple consisting of
+        a stem and suffix group (a string consisting of suffixes with no
+        delimiter).
 
         Args:
             token (str): A word to be segmented.
@@ -103,3 +111,15 @@ class Stemmer:
         """
         morphemes = self.parse(token)
         return (morphemes[0], ''.join(morphemes[1:]))
+
+    def gloss(self, token):
+        """Parse a token into a stem and a sequence of glosses.
+
+        Args:
+            token (str): A word to be glossed.
+
+        Returns:
+            list: stem followed by glosses for each suffix.
+
+        """
+        return self.parse(token, gloss=True)
