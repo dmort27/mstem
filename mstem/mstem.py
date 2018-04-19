@@ -22,6 +22,7 @@ class Stemmer:
         """Initialize lexicon and rules."""
         self.lexicon = self._read_lex(lex_fns)
         self.rules = self._read_rules(rule_fn)
+        self.class_re = re.compile(r'\{\{[A-Z]+\}\}')
 
     def _read_lex(self, lex_fns):
         lexicon = set()
@@ -50,7 +51,6 @@ class Stemmer:
             reader = csv.reader(f, delimiter='\t')
             next(reader)
             for (a, b, gloss) in reader:
-                # print('"{}" -> "{}"\t{}'.format(a, b, gloss))
                 a_re = re.compile(a)
                 rules.append((a_re, b, gloss))
         return rules
@@ -87,7 +87,7 @@ class Stemmer:
                 break
             while a_re.search(token):
                 m = a_re.search(token).group(0)
-                if not re.match('\{\{[A-Z]+\}\}', m):
+                if not self.class_re.match(m):
                     if gloss:
                         morphemes.append(gl)
                     else:
