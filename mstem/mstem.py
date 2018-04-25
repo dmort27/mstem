@@ -86,7 +86,7 @@ class Stemmer:
     def _add_morpheme(gloss, morphemes, pos, m, gl):
         return morphemes
 
-    def parse(self, token, gloss=False):
+    def _parse(self, token, gloss=False):
         """Parse a token into a list of stem and suffixes.
 
         Args:
@@ -110,10 +110,15 @@ class Stemmer:
                     else:
                         prefixes.append(affix)
                 token = a_re.sub(b, token, 1)
-        # We will now use suffixes as the collection of all morphemes
-        suffixes.appendleft(token)
-        suffixes.extendleft(prefixes)
-        return list(suffixes)
+        return (prefixes, token, suffixes)
+
+    def parse(self, token, gloss=False):
+        prefixes, token, suffixes = self._parse(self, token, gloss)
+        morphemes = deque()
+        morphemes.extend(prefixes)
+        morphemes.append(token)
+        morphemes.extend(suffixes)
+        return list(morphemes)
 
     def segment(self, token):
         """Parse a token into stem and suffix group.
@@ -126,10 +131,10 @@ class Stemmer:
             token (str): A word to be segmented.
 
         Returns:
-            tuple: root and suffix group.
+            tuple: prefix group, root, and suffix group.
         """
-        stem, morphemes = self.parse(token)
-        return (morphemes[0], ''.join(morphemes[1:]))
+        prefixes, stem, suffixes = self._parse(token)
+        return (''.join(prefixes), stem, ''.join(suffixes))
 
     def gloss(self, token):
         """Parse a token into a stem and a sequence of glosses.
