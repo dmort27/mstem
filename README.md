@@ -4,7 +4,7 @@ MStem is a Python 3 implementation of morphological stemming. It consists of a s
 
 Replacements that are enclosed in double curly brackets have a special meaning. These are used to enforce "position class" behavior. For example, case suffixes may be replaced with "{{CASE}}" and, when all case rules have been applied, "{{CASE}}" can then be replace with the empty string. This prevents the stemmer from applying multiple case rules since there can typically only be one case marker.
 
-Note that MStem really only suitable for parsing off inflectional suffixes. `Stemmer.segment` will not work properly with prefixes and the whole approach doesn't make sense for derivational morphology.
+Note that MStem really only suitable for parsing off inflectional prefixes and suffixes. Support for some infixes can be added, but it is not suitable for templatic morphology or infixes with complex prosodic subcategorization. The whole approach doesn't make sense for derivational morphology.
 
 ## Usage
 
