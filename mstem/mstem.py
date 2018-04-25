@@ -63,9 +63,10 @@ class Stemmer:
                 elif a[-1] == '$':
                     pos = 'suffix'
                 else:
-                    raise MalformedRuleError('No position specified in {}'.format(a))
+                    raise MalformedRuleError('No edge specified in {}'
+                                             .format(a))
                 a_re = re.compile(a)
-                rules.append((a_re, b, gloss))
+                rules.append((pos, a_re, b, gloss))
         return rules
 
     def stem(self, token):
@@ -87,16 +88,6 @@ class Stemmer:
         return morphemes
 
     def _parse(self, token, gloss=False):
-        """Parse a token into a list of stem and suffixes.
-
-        Args:
-            token (str): A word to be parsed.
-            gloss (bool): if True, list glosses instead of suffixes.
-
-        Returns:
-            list: stem followed by suffixes or glosses, as defined by the
-            rules in the rule set.
-        """
         prefixes, suffixes = deque(), deque()
         for pos, a_re, b, gl in self.rules:
             if token in self.lexicon:
@@ -113,7 +104,17 @@ class Stemmer:
         return (prefixes, token, suffixes)
 
     def parse(self, token, gloss=False):
-        prefixes, token, suffixes = self._parse(self, token, gloss)
+        """Parse a token into a list of stem and suffixes.
+
+        Args:
+            token (str): A word to be parsed.
+            gloss (bool): if True, list glosses instead of suffixes.
+
+        Returns:
+            list: stem followed by suffixes or glosses, as defined by the
+            rules in the rule set.
+        """
+        prefixes, token, suffixes = self._parse(token, gloss)
         morphemes = deque()
         morphemes.extend(prefixes)
         morphemes.append(token)
