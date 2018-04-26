@@ -1,0 +1,17 @@
+a	b	Gloss
+^magkasin	{{NEGEQ}}	Eq
+^magkasing	{{NEGEQ}}	Eq
+^magkasim	{{NEGEQ}}	Eq
+^dikasin	{{NEGEQ}}	Neg
+^dikasing	{{NEGEQ}}	Neg
+^dikasim	{{NEGEQ}}	Neg
+^pinaka	{{NEGEQ}}	Sup
+^{{NEGEQ}}		Negative/Equative
+^ma		Comp
+^(?<=[^aeiou])um	{{PFVVOICE}}	AV.Perf
+^(?<=[^aeiou])in	{{PFVVOICE}}	AV.Perf
+^um	{{PFVVOICE}}	AV.Perf
+^in	{{PFVVOICE}}	AV.Perf
+^.*{{PFVVOICE}}		Perfective/Voice
+an$	{{EXT}}	Zero
+{{EXT}}$		Extension
