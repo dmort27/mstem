@@ -18,19 +18,20 @@ class Stemmer:
             first column.
     """
 
-    def __init__(self, rule_fn, lex_fns=[]):
+    def __init__(self, rule_fn, lex_fns=[], delimiter='\t'):
         """Initialize lexicon and rules."""
-        self.lexicon = self._read_lex(lex_fns)
+        self.lexicon = self._read_lex(lex_fns, delimiter)
         self.rules = self._read_rules(rule_fn)
         self.class_re = re.compile(r'\{\{[A-Z]+\}\}')
 
-    def _read_lex(self, lex_fns):
+    def _read_lex(self, lex_fns, delimiter):
         lexicon = set()
         for fn in lex_fns:
             with open(fn, 'r', encoding='utf-8') as f:
-                reader = csv.reader(f, delimiter='\t')
-                for record in reader:
-                    lexicon.add(record[0])
+                for line in f:
+                    line = line.strip()
+                    records = line.split(delimiter)
+                    lexicon.add(records[0])
         return lexicon
 
     def _read_rules(self, rule_fn):
@@ -50,9 +51,9 @@ class Stemmer:
         with open(fn, 'r', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter='\t')
             next(reader)
-            for (a, b, gloss) in reader:
+            for a, b, gl in reader:
                 a_re = re.compile(a)
-                rules.append((a_re, b, gloss))
+                rules.append((a_re, b, gl))
         return rules
 
     def stem(self, token):
