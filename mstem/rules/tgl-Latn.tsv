@@ -8,10 +8,10 @@ a	b	Gloss
 ^pinaka	{{NEGEQ}}	Sup
 ^{{NEGEQ}}		Negative/Equative
 ^ma		Comp
-^(?<=[^aeiou])um	{{PFVVOICE}}	AV.Perf
-^(?<=[^aeiou])in	{{PFVVOICE}}	AV.Perf
+^([^aeiou])um	\1{{PFVVOICE}}	AV.Perf
+^([^aeiou])in	\1{{PFVVOICE}}	AV.Perf
 ^um	{{PFVVOICE}}	AV.Perf
 ^in	{{PFVVOICE}}	AV.Perf
-^.*{{PFVVOICE}}		Perfective/Voice
+^(.?){{PFVVOICE}}	\1	Perfective/Voice
 an$	{{EXT}}	Zero
 {{EXT}}$		Extension
