@@ -3,8 +3,15 @@
 import csv
 import os.path
 import re
+from collections import deque
 
 import pkg_resources
+
+
+class MalformedRuleError(Exception):
+    """Exception raised when rules are ill-formed."""
+
+    pass
 
 
 class Stemmer:
@@ -51,9 +58,16 @@ class Stemmer:
         with open(fn, 'r', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter='\t')
             next(reader)
-            for a, b, gl in reader:
+            for (a, b, gloss) in reader:
+                if a[0] == '^':
+                    pos = 'prefix'
+                elif a[-1] == '$':
+                    pos = 'suffix'
+                else:
+                    raise MalformedRuleError('No edge specified in {}'
+                                             .format(a))
                 a_re = re.compile(a)
-                rules.append((a_re, b, gl))
+                rules.append((pos, a_re, b, gloss))
         return rules
 
     def stem(self, token):
@@ -65,11 +79,30 @@ class Stemmer:
         Returns:
             str: ``token`` to which stemming rules have been applied.
         """
-        for (a_re, b, _) in self.rules:
+        for (_, a_re, b, __) in self.rules:
             if token in self.lexicon:
                 break
             token = a_re.sub(b, token)
         return token
+
+    def _add_morpheme(gloss, morphemes, pos, m, gl):
+        return morphemes
+
+    def _parse(self, token, gloss=False):
+        prefixes, suffixes = deque(), deque()
+        for pos, a_re, b, gl in self.rules:
+            if token in self.lexicon:
+                break
+            if a_re.search(token):
+                m = a_re.search(token).group(0)
+                if not self.class_re.match(m):
+                    affix = gl if gloss else m
+                    if pos == 'suffix':
+                        suffixes.appendleft(affix)
+                    else:
+                        prefixes.append(affix)
+                token = a_re.sub(b, token, 1)
+        return (prefixes, token, suffixes)
 
     def parse(self, token, gloss=False):
         """Parse a token into a list of stem and suffixes.
@@ -82,20 +115,12 @@ class Stemmer:
             list: stem followed by suffixes or glosses, as defined by the
             rules in the rule set.
         """
-        morphemes = []
-        for a_re, b, gl in self.rules:
-            if token in self.lexicon:
-                break
-            while a_re.search(token):
-                m = a_re.search(token).group(0)
-                if not self.class_re.match(m):
-                    if gloss:
-                        morphemes.append(gl)
-                    else:
-                        morphemes.append(m)
-                token = a_re.sub(b, token, 1)
+        prefixes, token, suffixes = self._parse(token, gloss)
+        morphemes = deque()
+        morphemes.extend(prefixes)
         morphemes.append(token)
-        return list(reversed(morphemes))
+        morphemes.extend(suffixes)
+        return list(morphemes)
 
     def segment(self, token):
         """Parse a token into stem and suffix group.
@@ -108,10 +133,10 @@ class Stemmer:
             token (str): A word to be segmented.
 
         Returns:
-            tuple: root and suffix group.
+            tuple: prefix group, root, and suffix group.
         """
-        morphemes = self.parse(token)
-        return (morphemes[0], ''.join(morphemes[1:]))
+        prefixes, stem, suffixes = self._parse(token)
+        return (''.join(prefixes), stem, ''.join(suffixes))
 
     def gloss(self, token):
         """Parse a token into a stem and a sequence of glosses.
