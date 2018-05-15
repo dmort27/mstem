@@ -1,8 +1,10 @@
 """Stems tokens until they are in the lexicon or the rules are exhausted."""
 
 import csv
+import sys
 import os.path
-import re
+import regex as re
+from unicodedata import normalize
 from collections import deque
 
 import pkg_resources
@@ -58,8 +60,13 @@ class Stemmer:
         with open(fn, 'r', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter='\t')
             next(reader)
-            for (a, b, glosses) in reader:
-                if a[0] == '^':
+            for line in reader:
+                # print(line, file=sys.stderr)
+                a, b, glosses = line
+                a, b = normalize('NFD', a), normalize('NFD', b)
+                if a[:2] == '{{' and a[-2:] == '}}':
+                    pos = 'delete'
+                elif a[0] == '^':
                     pos = 'prefix'
                 elif a[-1] == '$':
                     pos = 'suffix'
@@ -79,16 +86,15 @@ class Stemmer:
         Returns:
             str: ``token`` to which stemming rules have been applied.
         """
+        token = normalize('NFD', token)
         for (_, a_re, b, __) in self.rules:
             if token in self.lexicon:
                 break
             token = a_re.sub(b, token)
         return token
 
-    def _add_morpheme(gloss, morphemes, pos, m, gl):
-        return morphemes
-
     def _parse(self, token, gloss=False):
+        token = normalize('NFD', token)
         prefixes, suffixes = deque(), deque()
         for pos, a_re, b, gl in self.rules:
             if token in self.lexicon:
@@ -99,12 +105,12 @@ class Stemmer:
                     if gloss:
                         if pos == 'suffix':
                             suffixes.extendleft(gl)
-                        else:
+                        elif pos == 'prefix':
                             prefixes.extend(gl)
                     else:
                         if pos == 'suffix':
                             suffixes.appendleft(m)
-                        else:
+                        elif pos == 'prefix':
                             prefixes.append(m)
                 token = a_re.sub(b, token, 1)
         return (prefixes, token, suffixes)
