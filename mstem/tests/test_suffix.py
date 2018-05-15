@@ -17,6 +17,10 @@ class TestBenIPA(TestCase):
         self.assertTrue(self.stemmer.segment('gurujoner'),
                         ('', 'guru', 'joner'))
 
+    def test_parse_wp_ben_ipa(self):
+        self.assertTrue(self.stemmer.parse_wp('gurujoner'),
+                        ('guru', {'CL', 'GEN'}))
+
 
 class TestBenBeng(TestCase):
     def setUp(self):

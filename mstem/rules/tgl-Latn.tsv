@@ -7,11 +7,37 @@ a	b	Gloss
 ^dikasim	{{NEGEQ}}	Neg
 ^pinaka	{{NEGEQ}}	Sup
 ^{{NEGEQ}}		Negative/Equative
-^ma		Comp
-^(?<=[^aeiou])um	{{PFVVOICE}}	AV.Perf
-^(?<=[^aeiou])in	{{PFVVOICE}}	AV.Perf
-^um	{{PFVVOICE}}	AV.Perf
-^in	{{PFVVOICE}}	AV.Perf
-^.*{{PFVVOICE}}		Perfective/Voice
+h(?P<aff>an)$	{{EXT}}	Zero
+h(?P<aff>in)$	{{EXT}}	Cont
 an$	{{EXT}}	Zero
+in$	{{EXT}}	Cont
 {{EXT}}$		Extension
+^nakaka	{{VOICEP}}	Imp
+^naka	{{VOICEP}}	Imp
+^makaka	{{VOICEP}}	Cont
+^maka	{{VOICEP}}	Cont
+^mag	{{VOICEP}}	AV
+^mam	{{VOICEP}}	AV
+^man	{{VOICEP}}	AV
+^mang	{{VOICEP}}	AV
+^maki	{{VOICEP}}	AV
+^maka	{{VOICEP}}	AV
+^magsi	{{VOICEP}}	AV.Pl
+^nag	{{VOICEP}}	Perf
+^nam	{{VOICEP}}	Perf
+^nan	{{VOICEP}}	Perf
+^nang	{{VOICEP}}	Perf
+^naka	{{VOICEP}}	Perf
+^ni	{{VOICEP}}	Perf
+^na	{{VOICEP}}	Perf
+^ma	{{VOICEP}}	Perf
+^{{VOICEP}}		Voice Prefixes
+^([^aeiou])(?P<aff>um)	\1{{INFIX}}	AV.Perf
+^([^aeiou])(?P<aff>in)	\1{{INFIX}}	PV
+^um	{{INFIX}}	AV.Perf
+^in	{{INFIX}}	PV
+^(.?){{INFIX}}	\1	Infix
+^i	{{VOICE}}	CV
+^{{VOICE}}		Aspect
+^(?P<aff>[^aeiou][aeiou])(?P=aff)	{{RED}}\1	Imp
+^{{RED}}		Imperfect
