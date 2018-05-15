@@ -11,18 +11,18 @@ õ$	{{CN}}	OBL.PL
 e$	{{CN}}	DIR.PL
 o$	{{CN}}	VOC.PL
 {{CN}}		Case + Number
-ga:$ {{FUT}}  MASC.FUT
-giː$  {{FUT}} FEM.FUT
-ge$ {{FUT}} MASC.FUT
-{{FUT}}   Future Tense
+gaː$	{{FUT}}	MASC.FUT
+giː$	{{FUT}}	FEM.FUT
+ge$	{{FUT}}	MASC.FUT
+{{FUT}}		Future Tense
 ijegã$	{{DES}}	IMP.POL
 iegã$	{{DES}}	IMP.POL
 ije$	{{DES}}	IMP.FRM
 ie$	{{DES}}	IMP.FRM
-ũ$ {{DES}} 1.SG.IRR
-e$ {{DES}}  3.SG.IRR
-o$ {{DES}}  2.PL.FAM.IRR
-ẽ$ {{DES}} 3.PL.IRR
+un$	{{DES}}	1.SG.IRR
+e$	{{DES}}	3.SG.IRR
+o$	{{DES}}	2.PL.FAM.IRR
+ẽ$	{{DES}}	3.PL.IRR
 {{DES}}		Verbal Desinence
 aː$	{{PART}}	MASC.SG.PFV
 ĩː$	{{PART}}	FEM.PL.PFV
