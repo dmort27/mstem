@@ -1,0 +1,34 @@
+a	b	Gloss
+ne$	{{POSTP}}	ERG
+{{POSTP}}		Postpositions
+ijãː$	{{CN}}	DIR.PL
+ijõ$	{{CN}}	OBL.PL
+ijo$	{{CN}}	VOC.PL
+jõ$	{{CN}}	OBL.PL
+jo$	{{CN}}	VOC.PL
+aː$	{{CN}}	DIR.SG
+õ$	{{CN}}	OBL.PL
+e$	{{CN}}	DIR.PL
+o$	{{CN}}	VOC.PL
+{{CN}}		Case + Number
+ga:$ {{FUT}}  MASC.FUT
+giː$  {{FUT}} FEM.FUT
+ge$ {{FUT}} MASC.FUT
+{{FUT}}   Future Tense
+ijegã$	{{DES}}	IMP.POL
+iegã$	{{DES}}	IMP.POL
+ije$	{{DES}}	IMP.FRM
+ie$	{{DES}}	IMP.FRM
+ũ$ {{DES}} 1.SG.IRR
+e$ {{DES}}  3.SG.IRR
+o$ {{DES}}  2.PL.FAM.IRR
+ẽ$ {{DES}} 3.PL.IRR
+{{DES}}		Verbal Desinence
+aː$	{{PART}}	MASC.SG.PFV
+ĩː$	{{PART}}	FEM.PL.PFV
+iː$	{{PART}}	FEM.SG.PFV
+e$	{{PART}}	MASC.PL.PFV
+taː$	{{PART}}	MASC.SG.IPFV
+tiː$	{{PART}}	FEM.IPFV
+te$	{{PART}}	MASC.PL.IPFV
+{{PART}}		Participial Suffixes
