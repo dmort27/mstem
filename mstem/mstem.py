@@ -57,7 +57,7 @@ class Stemmer:
         with open(fn, 'r', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter='\t')
             next(reader)
-            for (a, b, gloss) in reader:
+            for (a, b, glosses) in reader:
                 if a[0] == '^':
                     pos = 'prefix'
                 elif a[-1] == '$':
@@ -66,7 +66,7 @@ class Stemmer:
                     raise MalformedRuleError('No edge specified in {}'
                                              .format(a))
                 a_re = re.compile(a)
-                rules.append((pos, a_re, b, gloss))
+                rules.append((pos, a_re, b, glosses.split('.')))
         return rules
 
     def stem(self, token):
@@ -95,11 +95,16 @@ class Stemmer:
             if a_re.search(token):
                 m = a_re.search(token).group(0)
                 if not self.class_re.match(m):
-                    affix = gl if gloss else m
-                    if pos == 'suffix':
-                        suffixes.appendleft(affix)
+                    if gloss:
+                        if pos == 'suffix':
+                            suffixes.extendleft(gl)
+                        else:
+                            prefixes.extend(gl)
                     else:
-                        prefixes.append(affix)
+                        if pos == 'suffix':
+                            suffixes.appendleft(m)
+                        else:
+                            prefixes.append(m)
                 token = a_re.sub(b, token, 1)
         return (prefixes, token, suffixes)
 
@@ -144,7 +149,8 @@ class Stemmer:
             token (str): A word to be glossed.
 
         Returns:
-            list: stem followed by glosses for each suffix.
+            list: glosses for each prefix, a stem, and glosses for each
+                  subject.
 
         """
         return self.parse(token, gloss=True)
