@@ -93,10 +93,14 @@ class Stemmer:
         for pos, a_re, b, gl in self.rules:
             if token in self.lexicon:
                 break
-            if a_re.search(token):
-                m = a_re.search(token).group(0)
-                if not self.class_re.match(m):
-                    affix = gl if gloss else m
+            while a_re.search(token):
+                m = a_re.search(token)
+                try:
+                    aff = m.groupdict()['aff']
+                except KeyError:
+                    aff = m[0]
+                if not self.class_re.search(aff):
+                    affix = gl if gloss else aff
                     if pos == 'suffix':
                         suffixes.appendleft(affix)
                     else:
@@ -115,12 +119,28 @@ class Stemmer:
             list: stem followed by suffixes or glosses, as defined by the
             rules in the rule set.
         """
-        prefixes, token, suffixes = self._parse(token, gloss)
+        prefixes, stem, suffixes = self._parse(token, gloss)
         morphemes = deque()
         morphemes.extend(prefixes)
-        morphemes.append(token)
+        morphemes.append(stem)
         morphemes.extend(suffixes)
         return list(morphemes)
+
+    def parse_wp(self, token):
+        """Parse a token into a stem and list of glosses.
+
+        Args:
+            token(str): A word to be parsed
+
+        Returns:
+            tuple: stem followed by list of glosses with prefixed glosses
+            first, as defined by the rule set
+        """
+        prefixes, stem, suffixes = self._parse(token, True)
+        glosses = deque()
+        glosses.extend(prefixes)
+        glosses.extend(suffixes)
+        return (stem, set(glosses))
 
     def segment(self, token):
         """Parse a token into stem and suffix group.
