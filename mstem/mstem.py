@@ -1,3 +1,4 @@
+from __future__ import print_function
 """Stems tokens until they are in the lexicon or the rules are exhausted."""
 
 import csv
@@ -97,6 +98,7 @@ class Stemmer:
         token = normalize('NFD', token)
         prefixes, suffixes = deque(), deque()
         for pos, a_re, b, gl in self.rules:
+            # print(token, file=sys.stderr)
             if token in self.lexicon:
                 break
             if a_re.search(token):
