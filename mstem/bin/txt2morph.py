@@ -18,7 +18,7 @@ def main(fnin):
                 lemma = parse[0]
                 morph = '+'.join(parse[1:])
                 print('w:{}~l:{}~m:{}~ipa:{}'.format(token, lemma, morph, ipa))
-            print()
+            print('')
 
 
 if __name__ == '__main__':
