@@ -11,6 +11,7 @@ def main(fnin):
     st = mstem.Stemmer('hin-IPA', ['../lexicons/hin.tsv'])
     with open(fnin, encoding='utf-8') as fin:
         for line in fin:
+            line = line.split()
             for token in line.split(' '):
                 ipa = epi.transliterate(token)
                 parse = st.gloss(ipa)
