@@ -8,7 +8,7 @@ import epitran
 
 def main(fnin):
     epi = epitran.Epitran('hin-Deva')
-    st = mstem.Stemmer('hin-IPA', ['../lexicons/hin.tsv'])
+    st = mstem.Stemmer('ben-IPA', ['../lexicons/ben.tsv'])
     with open(fnin, encoding='utf-8') as fin:
         for line in fin:
             line = line.strip()
@@ -17,6 +17,7 @@ def main(fnin):
                 parse = st.gloss(ipa)
                 lemma = parse[0]
                 morph = '+'.join(parse[1:])
+                morph = morph if morph else '<unk>'
                 print('w:{}~l:{}~m:{}~ipa:{}'.format(token, lemma, morph, ipa))
             print('')
 
